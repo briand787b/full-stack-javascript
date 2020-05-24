@@ -9,4 +9,4 @@
 FROM node:14.3
 WORKDIR /app
 EXPOSE 8080
-CMD [ "sh", "-c", "npm install && npm run dev" ]
+CMD [ "/app/start.sh" ]

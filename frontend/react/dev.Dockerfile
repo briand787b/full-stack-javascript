@@ -9,4 +9,4 @@
 FROM node:14.3
 WORKDIR /app
 EXPOSE 3000
-CMD [ "sh", "-c", "npm install && npm start" ]
+CMD [ "/app/start.sh" ]
