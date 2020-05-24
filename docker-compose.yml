@@ -1,0 +1,51 @@
+version: "3.7"
+
+services:
+  frontend-react:
+    build: ./frontend/react
+    # react app exits w/ code 0 w/o this
+    stdin_open: true 
+    volumes:
+      - type: bind
+        source: ./frontend/react
+        target: /app
+    ports: 
+      - 3000:3000
+    networks: 
+      - public
+    depends_on: 
+      - backend-node
+
+  backend-node:
+    build:
+      ./backend/node
+    volumes:
+      - type: bind
+        source: ./backend/node
+        target: /app
+    ports:
+      - 8000:8000
+    networks:
+      - public
+      - private
+
+  mongo:
+    build:
+      ./database/mongo
+    environment: 
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-zcrapr}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-zcrapr}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-zcrapr}
+    volumes:
+      - mongo_data:/data
+    ports:
+      - 27017:27017
+    networks: 
+      - private
+
+volumes: 
+  mongo_data:
+
+networks:
+  public:
+  private:
