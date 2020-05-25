@@ -62,3 +62,4 @@ docker-compose run --rm js-app /bin/bash
 npm install
 ```
 Please not that this is only an issue for bind-mounted containers.  Since you will not be bind-mounting in production, this will not be an issue outside of development.
+A potential solution to this problem, with the downside that you have to restart the container when deps change is shown here: https://stackoverflow.com/a/35317425
