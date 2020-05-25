@@ -2,9 +2,7 @@ version: "3.7"
 
 services:
   frontend-react:
-    build: 
-      context: ./frontend/react
-      dockerfile: dev.Dockerfile
+    build: ./frontend/react
     # react app exits w/ code 0 w/o this
     stdin_open: true 
     volumes:
@@ -19,9 +17,7 @@ services:
       - backend-node
 
   backend-node:
-    build:
-      context: ./backend/node
-      dockerfile: dev.Dockerfile
+    build: ./backend/node
     volumes:
       - type: bind
         source: ./backend/node
