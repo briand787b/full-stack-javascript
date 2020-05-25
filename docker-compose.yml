@@ -32,9 +32,9 @@ services:
     build:
       ./database/mongo
     environment: 
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-zcrapr}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-zcrapr}
-      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-zcrapr}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-mongo}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-mongo}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-mongo}
     volumes:
       - mongo_data:/data
     ports:
