@@ -20,11 +20,11 @@ app.get('/api/articles/:name', async (req, res) => {
     
     try {
         const client = await MongoClient.connect(
-            'mongodb://zcrapr:zcrapr@mongo:27017',
+            'mongodb://mongo:mongo@mongo:27017',
             {useNewUrlParser: true, useUnifiedTopology: true}
         );
     
-        const db = client.db('zcrapr');
+        const db = client.db('mongo');
         
         const articleInfo = await db.collection('articles')
             .findOne({ name: articleName });
@@ -42,17 +42,78 @@ app.get('/api/articles/:name', async (req, res) => {
     }
 });
 
-app.post('/api/articles/:name/upvote', (req, res) => {
+app.post('/api/articles/:name/upvote', async (req, res) => {
     const articleName = req.params.name;
-    articlesInfo[articleName].upvotes += 1;
+    try {
+        const client = await MongoClient.connect(
+            'mongodb://mongo:mongo@mongo:27017',
+            {useNewUrlParser: true, useUnifiedTopology: true}
+        );
+    
+        const db = client.db('mongo');
 
-    res.status(200).send(`Success! ${articleName} now has ${articlesInfo[articleName].upvotes} upvotes!`)
+        const articleInfo = await db.collection('articles')
+            .findOne({ name: articleName });
+        
+        await db.collection('articles')
+            .updateOne({ name: articleName }, {
+                '$set': {
+                    upvotes: articleInfo.upvotes + 1,
+                }
+            });
+
+        const updatedArticleInfo = await db.collection('articles')
+            .findOne({ name: articleName });
+        
+        client.close();
+        
+        if (!articleInfo) {
+            return res.status(404).send('article not found');
+        }
+    
+        res.status(200).json(updatedArticleInfo);
+    } catch (e) {
+        console.log(e);
+        res.status(500).send('something went wrong');
+    }
 });
 
-app.post('/api/articles/:name/add-comment', (req, res) => {
+app.post('/api/articles/:name/add-comment', async (req, res) => {
     const articleName = req.params.name;
     const { comment } = req.body;
-    articlesInfo[articleName].comments.push(comment);
+
+    try {
+        const client = await MongoClient.connect(
+            'mongodb://mongo:mongo@mongo:27017',
+            {useNewUrlParser: true, useUnifiedTopology: true}
+        );
+    
+        const db = client.db('mongo');
+
+        const articleInfo = await db.collection('articles')
+            .findOne({ name: articleName });
+        
+        await db.collection('articles')
+            .updateOne({ name: articleName }, {
+                '$set': {
+                    comments: articleInfo.comments.concat(comment),
+                }
+            });
+
+        const updatedArticleInfo = await db.collection('articles')
+            .findOne({ name: articleName });
+        
+        client.close();
+        
+        if (!articleInfo) {
+            return res.status(404).send('article not found');
+        }
+    
+        res.status(200).json(updatedArticleInfo);
+    } catch (e) {
+        console.log(e);
+        res.status(500).send('something went wrong');
+    }
 
     res.status(200).send(articlesInfo[articleName]);
 });
