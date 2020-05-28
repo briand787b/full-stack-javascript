@@ -52,6 +52,7 @@ js-app:
 ```
 
 ## Running On a New Machine
+tl;dr -> run `make install`
 Because the docker-compose.yml file bind mounts the app's directory, it will overwite the contents of the Dockerfile's `npm install` run command (or any file that is placed in the overwritten directory for that matter).  This is normally fine, except on fresh installs or after removing the node_modules directory. To rectify this, you will need to run the container interactively and manually install dependencies:
 (host)
 ```bash
