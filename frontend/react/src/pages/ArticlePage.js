@@ -9,7 +9,7 @@ const ArticlePage = () => {
 
     useEffect(() => {
         setArticleInfo({ upvotes: 3 })
-    });
+    }, []);
 
     const article = articles.find(article => article.name === name );
 

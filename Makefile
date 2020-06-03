@@ -1,3 +1,8 @@
+install:
+	docker-compose build frontend-react backend-node
+	docker-compose run --rm frontend-react npm install
+	docker-compose run --rm backend-node npm install
+
 run:
 	docker-compose down --remove-orphans
 	docker-compose build
